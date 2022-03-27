@@ -27,12 +27,7 @@ function NewProductPage() {
   const backToUserListHandle = () =>{
     navigate(-1)
   }
-  const vendorHandle = (e:any) =>{
-    setProduct((prev) => ({
-      ...prev,
-      vendor:e.target.value
-    }))
-  }
+
   const titleHandle = (e:any) =>{
     // setProductTitle(e.target.value)
     setProduct((prev) => ({
@@ -51,16 +46,17 @@ function NewProductPage() {
     const obj = selectedList[0]
     setProduct((prev) =>({
       ...prev,
-      category:obj.key
+      description:obj.key
     }))
     // console.log(obj.key)
-    // console.log(obj.key)
+    // console.log(selectedList)
   }
   const descriptionHandle = (e:any) =>{
     setProduct((prev) => ({
       ...prev,
       description:e.target.value
     }))
+    console.log(e.target.value)
   }
   const priceHandle = (e:any) =>{
     setProduct((prev) => ({
@@ -83,19 +79,10 @@ function NewProductPage() {
     }))
   }
   const addNewProduct = () =>{
-    let dataAdded: fetchResponse[] = []
     if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
-      dataAdded = productsData
-      dataAdded.push({
-        ...product,
-        id:Math.random()
-      })
-      dispatch(productsActions.products({
-        data:dataAdded
-      }))
-      navigate('/home/productlist') 
+      console.log('dispatch')
     }else{
-      alert('wrong')
+      console.log('no dispatch')
     }
     // dispatch(productsActions.products({
     //   ...product,
@@ -134,7 +121,7 @@ function NewProductPage() {
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
               <label htmlFor='vendor'>Vendor <span className='text-[#d13143]'>*</span></label>
             </div>  
-            <input onChange={vendorHandle} id='vendor' type='text' placeholder='Type Vendor name to select' className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
+            <input id='vendor' type='text' placeholder='Type Vendor name to select' className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
           </div>
           <div className='flex mb-[26px]'>
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
@@ -290,7 +277,7 @@ function NewProductPage() {
         </div>
       </div>
       <div className='flex items-center w-full h-[75px] bg-[#323259] px-[36px] py-[15px]' style={{boxShadow:'0 0 13px 0 #b18aff'}}>
-        <button  onClick={addNewProduct} className='flex items-center bg-[#f0ad4e] hover:opacity-80 w-[148px] h-[33px] px-[15px] py-[8px] rounded-md cursor-pointer'>Add product</button>
+        <button disabled={!btnAvailable} onClick={addNewProduct} className='flex items-center bg-[#f0ad4e] hover:opacity-80 w-[148px] h-[33px] px-[15px] py-[8px] rounded-md cursor-pointer'>Add product</button>
       </div>
     </div>
   )

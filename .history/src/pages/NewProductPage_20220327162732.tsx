@@ -51,10 +51,10 @@ function NewProductPage() {
     const obj = selectedList[0]
     setProduct((prev) =>({
       ...prev,
-      category:obj.key
+      description:obj.key
     }))
     // console.log(obj.key)
-    // console.log(obj.key)
+    console.log(obj.key)
   }
   const descriptionHandle = (e:any) =>{
     setProduct((prev) => ({
@@ -83,19 +83,11 @@ function NewProductPage() {
     }))
   }
   const addNewProduct = () =>{
-    let dataAdded: fetchResponse[] = []
     if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
-      dataAdded = productsData
-      dataAdded.push({
-        ...product,
-        id:Math.random()
-      })
-      dispatch(productsActions.products({
-        data:dataAdded
-      }))
-      navigate('/home/productlist') 
+      console.log('dispatch')
     }else{
-      alert('wrong')
+      console.log('no dispatch')
+      console.log(product)
     }
     // dispatch(productsActions.products({
     //   ...product,

@@ -83,17 +83,18 @@ function NewProductPage() {
     }))
   }
   const addNewProduct = () =>{
-    let dataAdded: fetchResponse[] = []
     if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
-      dataAdded = productsData
-      dataAdded.push({
+      let dataAdded = []
+      productsData.push({
         ...product,
         id:Math.random()
       })
       dispatch(productsActions.products({
-        data:dataAdded
-      }))
-      navigate('/home/productlist') 
+        data:productsData.push({
+          ...product,
+          id:Math.random()
+        })
+      })) 
     }else{
       alert('wrong')
     }

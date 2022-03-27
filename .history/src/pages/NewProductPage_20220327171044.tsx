@@ -83,16 +83,18 @@ function NewProductPage() {
     }))
   }
   const addNewProduct = () =>{
-    let dataAdded: fetchResponse[] = []
     if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
-      dataAdded = productsData
-      dataAdded.push({
-        ...product,
-        id:Math.random()
-      })
-      dispatch(productsActions.products({
-        data:dataAdded
-      }))
+      // let dataAdded: fetchResponse[] = []
+      // productsData.push({
+      //   ...product,
+      //   id:Math.random()
+      // })
+      // dispatch(productsActions.products({
+      //   data:productsData.push({
+      //     ...product,
+      //     id:Math.random()
+      //   })
+      // }))
       navigate('/home/productlist') 
     }else{
       alert('wrong')

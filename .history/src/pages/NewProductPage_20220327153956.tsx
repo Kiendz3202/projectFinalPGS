@@ -8,7 +8,7 @@ import Multiselect from 'multiselect-react-dropdown'
 import { FormControlLabel, FormGroup, Switch } from '@mui/material'
 import { Label } from '@mui/icons-material'
 import HelpIcon from '@mui/icons-material/Help';
-import {productsActions} from '../store/productsSlice'
+import productsActions from '../store/productsSlice'
 
 
 function NewProductPage() {
@@ -27,12 +27,7 @@ function NewProductPage() {
   const backToUserListHandle = () =>{
     navigate(-1)
   }
-  const vendorHandle = (e:any) =>{
-    setProduct((prev) => ({
-      ...prev,
-      vendor:e.target.value
-    }))
-  }
+
   const titleHandle = (e:any) =>{
     // setProductTitle(e.target.value)
     setProduct((prev) => ({
@@ -48,19 +43,19 @@ function NewProductPage() {
     }))
   }
   const categorySelectedHandle = (selectedList: any,selectedItem: any) => {
-    const obj = selectedList[0]
+    const obj = selectedItem[0]
     setProduct((prev) =>({
       ...prev,
-      category:obj.key
+      description:obj.key
     }))
-    // console.log(obj.key)
-    // console.log(obj.key)
+    console.log(obj.key)
   }
   const descriptionHandle = (e:any) =>{
     setProduct((prev) => ({
       ...prev,
       description:e.target.value
     }))
+    console.log(e.target.value)
   }
   const priceHandle = (e:any) =>{
     setProduct((prev) => ({
@@ -71,7 +66,7 @@ function NewProductPage() {
   const dateHandle = (e:any) =>{
     setProduct((prev) =>({
       ...prev,
-      arrivalDate:Math.floor(new Date(e.target.value).getTime() / 1000)
+      arrivalDate:e.target.value
     }))
     console.log(e.target.value)
     console.log(product)
@@ -83,38 +78,12 @@ function NewProductPage() {
     }))
   }
   const addNewProduct = () =>{
-    let dataAdded: fetchResponse[] = []
-    if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
-      dataAdded = productsData
-      dataAdded.push({
-        ...product,
-        id:Math.random()
-      })
-      dispatch(productsActions.products({
-        data:dataAdded
-      }))
-      navigate('/home/productlist') 
-    }else{
-      alert('wrong')
-    }
     // dispatch(productsActions.products({
-    //   ...product,
-    //   id:Math.random()
+    //   data:productsData
     // }))
   }
-  // useEffect(() =>{
-  //   if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
-  //     setBtnAvailable(true)
-  //   }else{
-  //     setBtnAvailable(false)
-  //   }
-  // },[product])
   useEffect(() =>{
-    let categories:any[] = []
-    productsData.map((product,index) => {
-      categories.push({cat:index,key:product.category})
-    })
-    setCategories(categories)
+
   },[])
 
 
@@ -134,7 +103,7 @@ function NewProductPage() {
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
               <label htmlFor='vendor'>Vendor <span className='text-[#d13143]'>*</span></label>
             </div>  
-            <input onChange={vendorHandle} id='vendor' type='text' placeholder='Type Vendor name to select' className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
+            <input id='vendor' type='text' placeholder='Type Vendor name to select' className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
           </div>
           <div className='flex mb-[26px]'>
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
@@ -166,6 +135,10 @@ function NewProductPage() {
               displayValue="key"
               onSelect={categorySelectedHandle}
               options={categories}
+              // selectedValues={[{
+              //   cat:`${thisProduct?.id}`,
+              //   key:`${thisProduct?.category}`
+              // }]}
             />
           </div>
           <div className='flex mb-[26px]'>
@@ -290,7 +263,7 @@ function NewProductPage() {
         </div>
       </div>
       <div className='flex items-center w-full h-[75px] bg-[#323259] px-[36px] py-[15px]' style={{boxShadow:'0 0 13px 0 #b18aff'}}>
-        <button  onClick={addNewProduct} className='flex items-center bg-[#f0ad4e] hover:opacity-80 w-[148px] h-[33px] px-[15px] py-[8px] rounded-md cursor-pointer'>Add product</button>
+        <button disabled={!btnAvailable} onClick={addNewProduct} className='flex items-center bg-[#f0ad4e] hover:opacity-80 w-[148px] h-[33px] px-[15px] py-[8px] rounded-md cursor-pointer'>Update product</button>
       </div>
     </div>
   )
