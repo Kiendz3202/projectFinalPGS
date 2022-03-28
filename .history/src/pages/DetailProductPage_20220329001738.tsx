@@ -43,7 +43,6 @@ function DetailProductPage() {
 
   let dateObj: Date = new Date(parseInt(product?.arrivalDate!) * 1000)
   console.log(dateObj)
-  console.log(product)
   // date = date.toISOString().substring(0,10)
   // console.log(Math.floor(new Date('2012-08-10').getTime() / 1000))
   // useEffect(() =>{

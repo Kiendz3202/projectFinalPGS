@@ -8,7 +8,7 @@ import { productsActions } from '../../store/productsSlice';
 import { fetchResponse } from '../list/ProductList';
 
 interface Props {
-  id?: string;
+  id?: number;
   sku?: string;
   price?: number;
   enabled?: number;

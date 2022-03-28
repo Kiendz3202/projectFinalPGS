@@ -43,7 +43,6 @@ function DetailProductPage() {
 
   let dateObj: Date = new Date(parseInt(product?.arrivalDate!) * 1000)
   console.log(dateObj)
-  console.log(product)
   // date = date.toISOString().substring(0,10)
   // console.log(Math.floor(new Date('2012-08-10').getTime() / 1000))
   // useEffect(() =>{
@@ -239,7 +238,7 @@ function DetailProductPage() {
               <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                 <label htmlFor='date'>Arrival date <span className='text-[#d13143]'>*</span></label>
               </div>  
-              {/* <input id='date' type='date' onChange={dateHandle} value={dateObj?.toISOString().substring(0,10)}   className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' /> */}
+              <input id='date' type='date' onChange={dateHandle} value={dateObj?.toISOString().substring(0,10)}   className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
             </div>
             <div className='flex mb-[26px]'>
               <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>

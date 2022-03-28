@@ -10,49 +10,22 @@ import { Label } from '@mui/icons-material'
 import HelpIcon from '@mui/icons-material/Help';
 import {productsActions} from '../store/productsSlice'
 
-function DetailProductPage() {
+
+function NewProductPage() {
   const navigate = useNavigate()
-  const {productId} = useParams()
+  // const {productId} = useParams()
   const dispatch = useDispatch()
   const productsData: fetchResponse[] = useSelector((state: RootState) => state.products.products)
-  const productsSearch: fetchResponse[] = useSelector((state: RootState) => state.products.productsSearch)
-  const isSearching: boolean = useSelector((state:RootState) => state.products.isSearching)
   // const thisProduct: fetchResponse | undefined = productsData?.find((item:any) => item?.id === productId)
-  const [product,setProduct] = useState<fetchResponse | undefined>(isSearching ? productsSearch?.find((item:any) => item?.id === productId) : productsData?.find((item:any) => item?.id === productId))
-  const [categories,setCategories] = useState<string[]>([])
-  const [date,setDate] = useState<Date>()
-
-  // useEffect(() =>{
-  //   setProduct(productsData?.find((item:any) => item?.id === productId))
-  // },[productsData])
+  const [product,setProduct] = useState<fetchResponse | undefined>({})
   // const [productTitle,setProductTitle] = useState<string | '' | undefined>(thisProduct?.name)
   // const [productSku,setProductSku] = useState<string | '' | undefined>(thisProduct?.sku)
-  // const [dataChanged,setDataChanged] = useState<fetchResponse[]>(productsData)
+  const [categories,setCategories] = useState<string[]>([])
   // const [btnUpdate,setBtnUpdate] = useState<boolean>(false)
-  // const [formValue,setFormValue] = useState<fetchResponse>({
-  //   id: product?.id,
-  //   sku: product?.sku,
-  //   price: product?.price,
-  //   arrivalDate: product?.arrivalDate,
-  //   name: product?.name,
-  //   description: product?.description,
-  //   vendor: product?.vendor,
-  //   amount: product?.amount,
-  //   category: product?.category
-  // })
-
-  let dateObj: Date = new Date(parseInt(product?.arrivalDate!) * 1000)
-  console.log(dateObj)
-  console.log(product)
-  // date = date.toISOString().substring(0,10)
-  // console.log(Math.floor(new Date('2012-08-10').getTime() / 1000))
-  // useEffect(() =>{
-  //   let date:Date = new Date(product?.arrivalDate! * 1000)
-  //   setDate(date)
-  // },[])
+  const [btnAvailable,setBtnAvailable] = useState<boolean>(false)
 
   const backToUserListHandle = () =>{
-    navigate('/home/productlist')
+    navigate(-1)
   }
   const vendorHandle = (e:any) =>{
     setProduct((prev) => ({
@@ -60,27 +33,28 @@ function DetailProductPage() {
       vendor:e.target.value
     }))
   }
-
   const titleHandle = (e:any) =>{
+    // setProductTitle(e.target.value)
     setProduct((prev) => ({
       ...prev,
       name:e.target.value
     }))
-    console.log(e.target.value)
   }
   const skuHandle = (e:any) =>{
+    // setProductSku(e.target.value)
     setProduct((prev) => ({
       ...prev,
       sku:e.target.value
     }))
   }
   const categorySelectedHandle = (selectedList: any,selectedItem: any) => {
-    // const [obj] = selectedItem
     const obj = selectedList[0]
     setProduct((prev) =>({
       ...prev,
       category:obj.key
     }))
+    // console.log(obj.key)
+    // console.log(obj.key)
   }
   const descriptionHandle = (e:any) =>{
     setProduct((prev) => ({
@@ -97,8 +71,10 @@ function DetailProductPage() {
   const dateHandle = (e:any) =>{
     setProduct((prev) =>({
       ...prev,
-      arrivalDate:Math.floor(new Date(e.target.value).getTime() / 1000).toString()
+      arrivalDate:Math.floor(new Date(e.target.value).getTime() / 1000)
     }))
+    console.log(e.target.value)
+    console.log(product)
   }
   const quantityStockHandle = (e:any) =>{
     setProduct((prev) => ({
@@ -106,39 +82,45 @@ function DetailProductPage() {
       amount:e.target.value
     }))
   }
-  const changeHandle = () =>{
-    let dataChanged: fetchResponse[] = []
-    // let productChangedIndex = dataChanged.findIndex((product) => product.id === productId)
-    // setDataChanged((prev) => prev.map((obj) => obj.id === productId ? {...obj,vendor:product?.vendor,name:product?.name,sku:product?.sku,category:product?.category,description:product?.description,price:product?.price,arrivalDate:product?.arrivalDate,amount:product?.amount} : obj ))
-    // setDataChanged((prev) => {
-    //   Object.assign(prev[productChangedIndex],{vendor:product?.vendor,name:product?.name,sku:product?.sku,category:product?.category,description:product?.description,price:product?.price,arrivalDate:product?.arrivalDate,amount:product?.amount})
-    //   return prev;
-    // })
-    // Object.assign(dataChanged[productChangedIndex],{vendor:product?.vendor,name:product?.name,sku:product?.sku,category:product?.category,description:product?.description,price:product?.price,arrivalDate:product?.arrivalDate,amount:product?.amount})
-    dataChanged = productsData.map((obj) => (obj.id === product?.id ? {...obj,vendor:product?.vendor,name:product?.name,sku:product?.sku,category:product?.category,description:product?.description,price:product?.price,arrivalDate:product?.arrivalDate,amount:product?.amount} : obj) )
-    dispatch(productsActions.products({
-      data:dataChanged
-    }))
-    // dispatch(productsActions.SearchProductForm({
-    //   data:dataChanged
+  const addNewProduct = () =>{
+    let dataAdded: fetchResponse[] = []
+    if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
+      // dataAdded = productsData
+      // dataAdded.push({
+      //   ...product,
+      //   id:Math.random()
+      // })
+      productsData.push({
+        ...product,
+        id:Math.random()
+      })
+      dispatch(productsActions.products({
+        data:productsData
+      }))
+      navigate('/home/productlist') 
+    }else{
+      alert('wrong')
+    }
+    // dispatch(productsActions.products({
+    //   ...product,
+    //   id:Math.random()
     // }))
-    console.log(productsData.map((obj) => obj.id === product?.id ? {...obj,vendor:product?.vendor,name:product?.name,sku:product?.sku,category:product?.category,description:product?.description,price:product?.price,arrivalDate:product?.arrivalDate,amount:product?.amount} : obj ))
-    // dispatch(productsActions.SearchProductForm({
-    //   isSearching:false,
-    //   data:dataChanged
-    // }))
-    // console.log(dataChanged)
-    navigate('/home/productlist')
   }
-
+  // useEffect(() =>{
+  //   if(product?.amount && product?.arrivalDate && product?.category && product?.description && product?.name && product?.price && product?.sku && product?.vendor){
+  //     setBtnAvailable(true)
+  //   }else{
+  //     setBtnAvailable(false)
+  //   }
+  // },[product])
   useEffect(() =>{
     let categories:any[] = []
     productsData.map((product,index) => {
       categories.push({cat:index,key:product.category})
     })
     setCategories(categories)
-    console.log(productsSearch)
   },[])
+
 
   return (
     <div className='bg-[#1b1b38] w-full h-full ml-[256px] mt-[76px] p-[36px] text-white'>
@@ -147,12 +129,8 @@ function DetailProductPage() {
           <ArrowBackIcon className='text-black pl-[4px]' />
         </div>
         <div className=' text-[28px]'>
-          {product && product.name}
+          Add product
         </div>
-      </div>
-      <div className='relative text-[#A16EFF] border-b border-white'>
-        <span className='ml-[10px] cursor-pointer'>Info</span>
-        <div className=' absolute w-[50px] h-[3px] bg-[#A16EFF]'></div>
       </div>
       <div className='my-[32px]'>
         <div>
@@ -160,13 +138,13 @@ function DetailProductPage() {
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
               <label htmlFor='vendor'>Vendor <span className='text-[#d13143]'>*</span></label>
             </div>  
-            <input id='vendor' type='text' onChange={vendorHandle} value={product?.vendor} className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
+            <input onChange={vendorHandle} id='vendor' type='text' placeholder='Type Vendor name to select' className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
           </div>
           <div className='flex mb-[26px]'>
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
               <label htmlFor='title'>Product Title <span className='text-[#d13143]'>*</span></label>
             </div>  
-            <input id='title' type='text' onChange={titleHandle} value={product?.name} className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+            <input id='title' type='text' onChange={titleHandle} className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
           </div>
           <div className='flex mb-[26px]'>
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
@@ -180,7 +158,7 @@ function DetailProductPage() {
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
               <label htmlFor='sku'>SKU <span className='text-[#d13143]'>*</span></label>
             </div>  
-            <input id='sku' type='text' onChange={skuHandle} value={product?.sku} className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
+            <input id='sku' type='text' onChange={skuHandle}  className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px]' />
           </div>
           <div className='flex mb-[26px]'>
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
@@ -188,21 +166,17 @@ function DetailProductPage() {
             </div>  
             <Multiselect
               // singleSelect
-              className='text-black bg-[#252547] w-full'
+              className='text-black bg-[#252547]'
               displayValue="key"
               onSelect={categorySelectedHandle}
               options={categories}
-              selectedValues={[{
-                cat:`${product?.id}`,
-                key:`${product?.category}`
-              }]}
             />
           </div>
           <div className='flex mb-[26px]'>
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
               <label htmlFor='description'>Description <span className='text-[#d13143]'>*</span></label>
             </div>  
-            <textarea onChange={descriptionHandle} value={product?.description} id='description' className='bg-[#1b1b38] resize-none w-[550px] h-[196px] border border-white' placeholder='Enter text here...'></textarea>
+            <textarea onChange={descriptionHandle} id='description' className='bg-[#1b1b38] resize-none w-[550px] h-[196px] border border-white' placeholder='Enter text here...'></textarea>
           </div>
           <div className='flex mb-[26px]'>
             <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
@@ -233,19 +207,19 @@ function DetailProductPage() {
               <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                 <label htmlFor='price'>Price <span className='text-[#d13143]'>*</span></label>
               </div>  
-              <input id='title' type='text' onChange={priceHandle} value={product?.price} className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+              <input id='title' type='text' onChange={priceHandle}  className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
             </div>
             <div className='flex mb-[26px]'>
               <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                 <label htmlFor='date'>Arrival date <span className='text-[#d13143]'>*</span></label>
               </div>  
-              {/* <input id='date' type='date' onChange={dateHandle} value={dateObj?.toISOString().substring(0,10)}   className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' /> */}
+              <input id='date' type='date' onChange={dateHandle}  className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
             </div>
             <div className='flex mb-[26px]'>
               <div className='flex justify-end w-[175px] leading-[38px] mr-[20px]'>
                 <label htmlFor='quantity'>Quantity in stock <span className='text-[#d13143]'>*</span></label>
               </div>  
-              <input id='quantity' type='text' onChange={quantityStockHandle} value={product?.amount} className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
+              <input id='quantity' type='text' onChange={quantityStockHandle}  className='bg-[#252547] h-[38px] w-[380px] pl-[15px] pr-[40px] truncate' />
             </div>
         </div>      
       </div>
@@ -320,12 +294,13 @@ function DetailProductPage() {
         </div>
       </div>
       <div className='flex items-center w-full h-[75px] bg-[#323259] px-[36px] py-[15px]' style={{boxShadow:'0 0 13px 0 #b18aff'}}>
-        <button onClick={changeHandle} className='flex items-center bg-[#f0ad4e] hover:opacity-80 w-[148px] h-[33px] px-[15px] py-[8px] rounded-md cursor-pointer'>Update product</button>
+        <button  onClick={addNewProduct} className='flex items-center bg-[#f0ad4e] hover:opacity-80 w-[148px] h-[33px] px-[15px] py-[8px] rounded-md cursor-pointer'>Add product</button>
       </div>
     </div>
   )
 }
 
-export default DetailProductPage
+export default NewProductPage
 
 //select new zone chua fetch dc api de render
+

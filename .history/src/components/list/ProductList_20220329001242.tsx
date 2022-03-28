@@ -13,7 +13,7 @@ import Cookies from 'js-cookie';
 
 
 export interface fetchResponse {
-  id?: string | undefined;
+  id?: number | undefined;
   sku?: string;
   price?: number;
   enabled?: number;
